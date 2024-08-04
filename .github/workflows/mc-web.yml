@@ -25,12 +25,14 @@ jobs:
     - name: Start WebSSH2
       run: |
         cd webssh2
-        nohup node app &  # Запуск WebSSH2 в фоновом режиме
-        sleep 10          # Ожидание запуска
+        nohup node app.js &  # Запуск WebSSH2 в фоновом режиме
+        sleep 30             # Увеличено время ожидания для запуска
 
     - name: Start Midnight Commander
       run: |
         nohup tmux new-session -d -s mc 'mc' &  # Запуск mc в новой tmux сессии
 
     - name: Verify WebSSH2
-      run: curl -k https://localhost:2222  # Проверка доступности WebSSH2
+      run: |
+        sleep 10  # Дополнительное ожидание для уверенности
+        curl -k https://localhost:2222  # Проверка доступности WebSSH2
