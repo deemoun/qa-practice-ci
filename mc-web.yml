@@ -1,0 +1,39 @@
+name: Setup MC with Web Access
+
+on:
+  workflow_dispatch:
+
+jobs:
+  setup-mc:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y mc nodejs npm
+
+    - name: Setup WebSSH2
+      run: |
+        git clone https://github.com/billchurch/webssh2.git
+        cd webssh2
+        npm install
+
+    - name: Start WebSSH2
+      run: |
+        cd webssh2
+        node app &  # Запуск WebSSH2 в фоновом режиме
+        sleep 10    # Ожидание запуска
+
+    - name: Start Midnight Commander
+      run: |
+        tmux new-session -d -s mc 'mc'  # Запуск mc в новой tmux сессии
+
+    - name: Verify WebSSH2
+      run: curl -k https://localhost:2222  # Проверка доступности WebSSH2
+
+    - name: Show WebSSH2 URL
+      run: echo "Access WebSSH2 at: https://localhost:2222"
