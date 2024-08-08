@@ -1,3 +1,4 @@
 output.json
 report.html
+pytest_html_report.html
 __pycache__/
